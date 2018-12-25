@@ -3,6 +3,7 @@ services:
   liquid:
     restart: unless-stopped
     build: .
+    container_name: liquid
     ports:
       - "7042"
     links:
