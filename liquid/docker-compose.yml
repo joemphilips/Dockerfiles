@@ -1,0 +1,40 @@
+version: "3.0"
+services: 
+  liquid:
+    restart: unless-stopped
+    build: .
+    ports:
+      - "7042"
+    links:
+      - bitcoind
+    command: 
+      - "-regtest"
+      - "-mainchainrpchost=bitcoind"
+      - "-mainchainrpcport=18443"
+      - "-mainchainrpcuser=hoge"
+      - "-mainchainrpcpassword=fuga"
+      - "-datadir=/home/liquid/data"
+    volumes:
+      - "~/.liquid:/home/liquid/data"
+      - "bitcoind:/home/.bitcoin"
+
+  bitcoind:
+    restart: unless-stopped
+    image: nicolasdorier/docker-bitcoin:0.17.0
+    expose:
+      - "8332"
+      - "8333"
+      - "18332"
+      - "18333"
+      - "18443"
+      - "18444"
+    command:
+      - "bitcoind"
+      - "-regtest"
+      - "-printtoconsole"
+      - "-rpcuser=hoge"
+      - "-rpcpassword=fuga"
+      - "-txindex=1"
+      - "-whitelist=0.0.0.0/0"
+volumes:
+  bitcoind:
